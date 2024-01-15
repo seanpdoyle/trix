@@ -1,3 +1,4 @@
+import * as config from "trix/config"
 import { rangesAreEqual } from "trix/core/helpers"
 
 import {
@@ -13,6 +14,7 @@ import {
   test,
   testGroup,
   testIf,
+  testUnless,
   triggerEvent,
   typeCharacters,
   typeInToolbarDialog,
@@ -510,12 +512,12 @@ testGroup("<label> support", { template: "editor_with_labels" }, () => {
     assert.deepEqual(Array.from(getEditorElement().labels), labels)
   })
 
-  test("focuses when <label> clicked", () => {
+  testUnless(config.editor.formAssociated, "focuses when <label> clicked", () => {
     document.getElementById("label-1").click()
     assert.equal(getEditorElement(), document.activeElement)
   })
 
-  test("focuses when <label> descendant clicked", () => {
+  testUnless(config.editor.formAssociated, "focuses when <label> descendant clicked", () => {
     document.getElementById("label-1").querySelector("span").click()
     assert.equal(getEditorElement(), document.activeElement)
   })

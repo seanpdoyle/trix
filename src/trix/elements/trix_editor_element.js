@@ -212,7 +212,7 @@ class InputElementDelegate {
   }
 
   get defaultValue() {
-    return this.value
+    return this.#element.value
   }
 
   // Element lifecycle
@@ -255,6 +255,58 @@ class InputElementDelegate {
   }
 }
 
+class ElementInternalsDelegate {
+  #element
+  #internals
+  #value = ""
+
+  constructor(element) {
+    this.#element = element
+    this.#internals = element.attachInternals()
+  }
+
+  get value() {
+    return this.#value
+  }
+
+  // Properties
+
+  get labels() {
+    return this.#internals.labels
+  }
+
+  get form() {
+    return this.#internals.form
+  }
+
+  get name() {
+    return this.#element.getAttribute("name")
+  }
+
+  get inputElement() {
+    return null
+  }
+
+  get defaultValue() {
+    return this.#element.innerHTML
+  }
+
+  // Form support
+
+  setFormValue(value) {
+    this.#value = value
+    this.#internals.setFormValue(value)
+  }
+
+  // Element lifecycle
+
+  connectedCallback() {
+  }
+
+  disconnectedCallback() {
+  }
+}
+
 export default class TrixEditorElement extends HTMLElement {
   static formAssociated = false
 
@@ -262,7 +314,9 @@ export default class TrixEditorElement extends HTMLElement {
 
   constructor() {
     super()
-    this.#delegate = new InputElementDelegate(this)
+    this.#delegate = this.constructor.formAssociated ?
+      new ElementInternalsDelegate(this) :
+      new InputElementDelegate(this)
   }
 
   // Properties

@@ -101,6 +101,10 @@ if (process.env.SAUCE_ACCESS_KEY) {
   }
 }
 
+if (process.env.EDITOR_FORM_ASSOCIATED === "true") {
+  config.files.unshift({ pattern: "src/test/test_helpers/fixtures/form_associated.js", watched: false, included: true })
+}
+
 function buildId() {
   const { GITHUB_WORKFLOW, GITHUB_RUN_NUMBER, GITHUB_RUN_ID } = process.env
   return GITHUB_WORKFLOW && GITHUB_RUN_NUMBER && GITHUB_RUN_ID

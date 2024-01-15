@@ -1,6 +1,7 @@
+import * as config from "trix/config"
 import EditorController from "trix/controllers/editor_controller"
 
-import { assert, test, testGroup } from "test/test_helper"
+import { assert, test, testGroup, testUnless } from "test/test_helper"
 import { nextFrame } from "../test_helpers/timing_helpers"
 
 testGroup("Installation process", { template: "editor_html" }, () => {
@@ -31,7 +32,7 @@ testGroup("Installation process without specified elements", { template: "editor
     assert.equal(editorElement.toolbarElement, toolbarElement)
   })
 
-  test("creates identified input elements", () => {
+  testUnless(config.editor.formAssociated, "creates identified input elements", () => {
     const editorElement = getEditorElement()
 
     const inputId = editorElement.getAttribute("input")
